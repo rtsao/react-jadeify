@@ -4,10 +4,9 @@ var through = require('through2');
 var path = require('path');
 var reactJadeParse = require('react-jade/lib/parse');
 
-// See: http://git.io/vEk71
-var EXTRA_REGEX = /;\nreturn fn;$/;
+var wrapper = require('./wrapper');
 
-module.exports = function (filename, opts) {
+module.exports = function(filename, opts) {
 
   if (path.extname(filename) !== '.jade') {
     return through2();
@@ -21,14 +20,7 @@ module.exports = function (filename, opts) {
       return error(e);
     }
 
-    var code = [
-      '"use strict";',
-      'var React = require("react");',
-      fnSource.replace(EXTRA_REGEX, ''),
-      'module.exports = fn;'
-    ].join('\n');
-
-    this.push(code);
+    this.push(wrapper(fnSource));
     next();
   });
 

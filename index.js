@@ -9,7 +9,7 @@ var wrapper = require('./wrapper');
 module.exports = function(filename, opts) {
 
   if (path.extname(filename) !== '.jade') {
-    return through2();
+    return through();
   }
 
   var output = through(function(buf, enc, next) {
